@@ -11,10 +11,9 @@ db.on('error', ()=>console.log('error connecting database')); //checking for err
 db.once('open', ()=>console.log('connected to database')); //confirming connected
 
 //middlewares
-app.use('/api',bodyParser);
-app.use('/api',controllers);
-
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(controllers);
 
 //listening port
 const port = process.env.PORT || 3030;
