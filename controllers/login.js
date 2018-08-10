@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const Joi = require('joi');
 const User = require('../models/users');
 
@@ -17,12 +18,14 @@ router.post('/',(req,res)=>{
             if(res){
                 const result = res.find(x=> x.username == data.value.usernameOrEmail || x.email == data.value.usernameOrEmail);
                 if(result){
-                    if(data.value.password === result.password){
-                        const token = jwt.sign({_id:result._id,username:result.username},"private");
-                        res.send({status:true,token:token,response:'successfully logged in'})
-                    }else{
-                        res.status(400).send({status:false,response:'wrong password'})
-                    }
+                    bcrypt.compare(data.value.password,result.password,(err,response)=>{
+                        if(response){
+                            const token = jwt.sign({_id:result._id,username:result.username},"private");
+                            res.send({status:true,token:token,response:'successfully logged in'})
+                        }else{
+                            res.status(400).send({status:false,response:'wrong password'})
+                        }
+                    })
                 }else{
                     res.status(404).send({status:false,response:'account not found'})
                 }
