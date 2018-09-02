@@ -10,4 +10,6 @@ const userSchema = new mongoose.Schema({
     admin:Boolean
 })
 
+ 
+
 module.exports = mongoose.model('User',userSchema);
