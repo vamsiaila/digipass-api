@@ -33,7 +33,6 @@ router.delete('/city', (req,res)=>{
 })
 
 router.post('/stage', (req,res)=>{
-    console.log('ok')
     const stage = new Stage(req.body);
     stage.save((err,result)=>{
         if(err) throw err;
